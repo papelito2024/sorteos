@@ -64,6 +64,9 @@ import  authRouter from "./routes/auth.js"
 
 
 
+app.use("/auth",authRouter)
+
+
 
 
 
