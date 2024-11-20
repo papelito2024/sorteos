@@ -22,7 +22,7 @@ const validation = (file, validation) => {
 
     } catch (error) {
 
-      error.name = "App"
+     
       const auth = new AuthExceptions(error);
       
       auth.handler()
@@ -47,6 +47,7 @@ const validation = (file, validation) => {
       const result = await validation.run(req);
       if (!result.isEmpty()) {
         result.array().map((e) => {
+          //console.log(e)
           if (e.path in errors != true) errors[e.path] = e.msg;
         });
         continue;
@@ -57,6 +58,7 @@ const validation = (file, validation) => {
      * 
    
      */
+    console.log(errors)
 
      const auth = new AuthExceptions({
        name: "Validation",

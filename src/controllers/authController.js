@@ -1,11 +1,11 @@
-
-import bcrypt from "bcrypt"
-import jsonWebToken  from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import jsonWebToken from "jsonwebtoken";
+import AuthExceptions from "../utils/exceptions/authExceptions.js";
+import AuthError from "../utils/exceptions/customErrors/authError.js";
+import Users from "../models/users.js";
 
 class AuthController {
-  constructor() {
-
-  }
+  constructor() {}
 
   async signin(req, res, next) {
     try {
@@ -14,12 +14,12 @@ class AuthController {
         "_id username email rol valid avatar key password"
       );
 
-      if (user === null) throw new AuthError("invalid credentias");
+      if (user === null) throw new AuthError("invalid credentias", "algo");
 
       if (!(await user.validatePassword(req.body.password)))
         throw new AuthError("invalid credentias");
 
-      const accessToken = jwt.sign(
+      const accessToken = jsonWebToken.sign(
         {
           _id: user._id,
           username: user.username,
@@ -38,20 +38,30 @@ class AuthController {
       };
 
       res.cookie.accessToken = accessToken;
-      res.json({ accessToken });
+
+      res.status(200).json({
+        status: "success",
+        message: "logged  successfully",
+        code: 200,
+        data: {
+          token: accessToken,
+        },
+      });
 
       // next();
     } catch (error) {
+      const auth = new AuthExceptions(error);
 
-      const authEx = new AuthExceptions(error);
+      auth.handler();
 
-      return res.status(401).json(authEx.handler());
+      return res.status(401).json(auth.getErrorResponseFormat());
     }
   }
 
   async signup(req, res, next) {
+    
     try {
-      req.body.chango = "Asdasd";
+    // console.log(req.body)
       const user = new Users(req.body);
 
       await user.save();
@@ -67,7 +77,9 @@ class AuthController {
         })
         */
 
-      const accessToken = jwt.sign(
+   
+
+      const accessToken = jsonWebToken.sign(
         {
           _id: user._id,
           username: user.username,
@@ -78,22 +90,28 @@ class AuthController {
         { expiresIn: "1800s" }
       );
 
+       res.cookie.accessToken = accessToken;
+
       //req.session.user=user;
-      res
-        .status(200)
-        .json({
-          operation: "successfull",
-          msg: "registeer user successfully",
-          accessToken,
-        });
+      res.status(200).json({
+        status: "success",
+        message: "registeer user successfully",
+        code:200,
+        data:{
+          token:accessToken,
+        }
+      });
       //next();
     } catch (error) {
+
+      console.log(error)
+
       return res.status(400).json({
         status: "error",
         code: 401,
         message: "validation error: invalid data recived",
         type: "",
-        errors: errors,
+        errors: {},
       });
     }
   }
@@ -109,7 +127,7 @@ class AuthController {
   async forgotPassword(req, res, next) {
     //validar email
     if (req.body.email) {
-      console.log(req.body.email);
+     // console.log(req.body.email);
       req.session.email = req.body.email;
       //enveri email
 
@@ -132,7 +150,7 @@ class AuthController {
 
         next();
       } catch (error) {
-        console.log(error);
+        //console.log(error);
         return res.status(400).send("error");
       }
     }
@@ -148,4 +166,4 @@ class AuthController {
   }
 }
 
-export default AuthController
+export default AuthController;

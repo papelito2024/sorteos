@@ -20,17 +20,16 @@ const validations = {
   ],
   signup: [
     body("username")
-      .notEmpty()
-      .withMessage("this field must not be  empty")
+      .notEmpty().withMessage("this field must not be  empty")
       .isLength(3)
       .withMessage("this fiel must  have at least 3 characters")
       .isLength({ max: 15 })
       .withMessage("this fiel must not execed from 15 characters")
 
       .custom(async (value, { req }) => {
-        const user = await users.find({ username: value }).exec();
-
-        if (user.length > 0) throw new Error("this user already exists");
+        const user = await Users.findOne({ username: value })
+        
+        if (user!=null) throw new Error("this user already exists");
       }),
     body("email")
       .notEmpty()
@@ -40,9 +39,12 @@ const validations = {
       .isEmail()
       .withMessage("this is not a valid email")
       .custom(async (value, { req }) => {
-        const user = await users.find({ email: value });
-        console.log(user);
-        if (user.length) throw new Error("this email already exists");
+        
+           const user = await Users.findOne({ email: value })
+          // console.log(user);
+           if (user!=null)  throw new Error("this email is already registered");
+    
+       
       }),
     body("password")
       .notEmpty()
@@ -62,7 +64,7 @@ const validations = {
       .custom(async (value, { req }) => {
         const user = await users.findOne({ email: value });
         console.log(user);
-        if (!user) throw new Error("this user doesnt exists");
+        if (user!=null) throw new Error("this user doesnt exists");
       }),
     body("password")
       .optional()

@@ -1,41 +1,43 @@
-
-import ErrorResponse from "./response/errorResponse.js"
+import ErrorResponse from "./response/errorResponse.js";
 
 class ExceptionsHandler {
-  
-    constructor(error) {
+  constructor(error) {
+    this.error = error;
+    this.errorResponse;
+
+    this.customErrors=[
+        "Auth",
+        "Validation",
         
-        this.error = error;
-        this.errorResponse;
+    ]
+  }
 
-    }
+  handler() {
+
+   
+    if(this.customErrors.includes(this.error.name)) return  this[this.error.name.toLowerCase()]();
 
 
-  getErrorResponseFormat(){
+    return this.app() 
+  }
+
+  getErrorResponseFormat() {
     return this.errorResponse.getResponse();
   }
 
-
-  setErrorReponse(res){
-
+  setErrorReponse(res) {
     this.errorResponse = new ErrorResponse(res);
-
   }
 
-  app(){
+  app() {
+    console.log(this.error)
     this.errorResponse = new ErrorResponse({
       message: `Internal Application error`,
       code: 409,
       type: [process.env.HOSTNAME, "errors", "application"].join("/"),
       errors: {},
     });
-
-  
-
   }
-
-
-
 
   validation() {
     this.errorResponse = new ErrorResponse({
@@ -44,8 +46,6 @@ class ExceptionsHandler {
       type: [process.env.HOSTNAME, "errors", this.error?.name].join("/"),
       errors: this.error.errors,
     });
-
- 
   }
 }
 

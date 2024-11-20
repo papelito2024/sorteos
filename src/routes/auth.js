@@ -7,11 +7,12 @@ const authController = new AuthController();
 
 const authRouter=Router()
  
+
+
+
 authRouter.post("/signin",validation("auth","signin"), authController.signin);
 
-authRouter.post("/signup", (req, res) => {
-  res.send("signin");
-});
+authRouter.post("/signup",validation("auth","signup"), authController.signup);
 
 authRouter.post("signout", (req, res) => {
   res.send("signin");

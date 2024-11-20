@@ -1,12 +1,15 @@
 
 
 
-
-
 POST http://localhost:3000/auth/signin HTTP/1.1
 content-type: application/json
 
 {
-    "email": "panchito@a",
-    "password": "putita"
+    "username":"pipito",
+    "email": "panchito@as.com",
+    "password": "putita12"
 }
+
+
+
+

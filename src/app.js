@@ -5,7 +5,9 @@ import cors from "cors"
 import createHttpError from "http-errors"
 import path from "path"
 import cookieParser from "cookie-parser"
-import { configDotenv } from "dotenv"
+// loadEnv.js
+import dotenv from 'dotenv';
+
 import session from "express-session"
 import { getGlobals } from "common-es";
 const { __dirname, __filename } = getGlobals(import.meta.url);
@@ -21,9 +23,7 @@ const app = express();
 /**
  * dotenv enviroment varaibles
  */
-
-configDotenv()
-
+dotenv.config();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -60,9 +60,9 @@ app.use(session({
  * routes config
  */
 
+
 import  authRouter from "./routes/auth.js"
-
-
+//console.log(authRouter)
 
 app.use("/auth",authRouter)
 

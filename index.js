@@ -8,7 +8,7 @@ import app from "./src/app.js"
 
 import debug from "debug"
 
-const wea="ASdasd"
+
 
 import http from "http"
 
@@ -19,14 +19,16 @@ import mongoose from "mongoose"
 /**
  * databae connection
  * 
+
+
+ */
+
 main()
   .then(() => console.log("database connected"))
   .catch((err) => {
     console.log(err);
     node.process.exit(0);
   });
-
- */
 
 async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/sorteos");
