@@ -8,6 +8,7 @@ import app from "./src/app.js"
 
 import debug from "debug"
 
+const wea="ASdasd"
 
 import http from "http"
 
