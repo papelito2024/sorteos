@@ -1,4 +1,4 @@
-const Response = require("./response");
+import Response from "./response.js"
 
 class ErrorResponse extends Response {
   constructor({ message, errors, type, code }) {
@@ -18,4 +18,4 @@ class ErrorResponse extends Response {
   }
 }
 
-module.exports = ErrorResponse;
+export default ErrorResponse

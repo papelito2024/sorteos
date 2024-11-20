@@ -2,8 +2,7 @@
 import bcrypt from "bcrypt"
 import jsonWebToken  from "jsonwebtoken";
 
-
-class AuthControllerr {
+class AuthController {
   constructor() {
 
   }
@@ -43,6 +42,7 @@ class AuthControllerr {
 
       // next();
     } catch (error) {
+
       const authEx = new AuthExceptions(error);
 
       return res.status(401).json(authEx.handler());
@@ -148,4 +148,4 @@ class AuthControllerr {
   }
 }
 
-export default authController
+export default AuthController

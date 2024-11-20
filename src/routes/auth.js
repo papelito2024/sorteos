@@ -1,12 +1,13 @@
 import { Router } from "express";
 
 import validation from "../middleware/validation/validation.js"
+import AuthController from "../controllers/authController.js"
+
+const authController = new AuthController();
 
 const authRouter=Router()
  
-authRouter.post("/signin",validation("auth","signin"), (req, res) => {
-  res.send("signin");
-});
+authRouter.post("/signin",validation("auth","signin"), authController.signin);
 
 authRouter.post("/signup", (req, res) => {
   res.send("signin");
