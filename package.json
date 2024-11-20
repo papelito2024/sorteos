@@ -5,15 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "dev":"nodemon ./index.js",
-    "start":"node ./index.js"
+    "dev": "nodemon ./index.js",
+    "start": "node ./index.js"
   },
   "repository": {
     "type": "git",
     "url": "www.github.com/papelito2024/sorteos"
   },
-
-  "type": "module" , 
+  "type": "module",
   "keywords": [
     "sorteos",
     "premios",
@@ -23,9 +22,9 @@
   ],
   "author": "papelito2024",
   "license": "ISC",
-    "dependencies": {
+  "dependencies": {
     "bcrypt": "^5.1.1",
-    
+    "common-es": "^1.0.1",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",

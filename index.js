@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-import app from "./app.js"
+import app from "./src/app.js"
 
 import debug from "debug"
 
@@ -13,7 +13,7 @@ import http from "http"
 
 
 import mongoose from "mongoose"
-import morgan from "morgan"
+
 
 /**
  * databae connection
