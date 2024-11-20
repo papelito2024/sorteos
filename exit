@@ -1,0 +1,35 @@
+[33mcommit d11f8cbdbe2079119ff904a3928b900526c1086e[m[33m ([m[1;36mHEAD[m[33m)[m
+Author: papelito23 <dontknowhy1234@gmail.com>
+Date:   Tue Nov 19 23:39:29 2024 -0300
+
+    added auth controller and exception handlers
+
+[33mcommit a0072886803ac0979919212dfec24870db9588ac[m
+Author: papelito23 <dontknowhy1234@gmail.com>
+Date:   Tue Nov 19 23:11:00 2024 -0300
+
+    added auth
+
+[33mcommit e95f0e9b18627a6c5cef3cc0464795432f8ad4fe[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Author: papelito23 <dontknowhy1234@gmail.com>
+Date:   Tue Nov 19 22:53:34 2024 -0300
+
+    added auth
+
+[33mcommit 8d9bbe28d3211a09f9f836be4a383c9427bc457c[m
+Author: papelito23 <dontknowhy1234@gmail.com>
+Date:   Tue Nov 19 20:10:23 2024 -0300
+
+    app setting up
+
+[33mcommit 7408632c4da79a88b0486613d7c67b2dc5efbc38[m
+Author: papelito23 <dontknowhy1234@gmail.com>
+Date:   Tue Nov 19 19:53:34 2024 -0300
+
+    Mensaje de commit
+
+[33mcommit d47fb67ef126a3072a0c4c6aba01f26ea08f4d1c[m
+Author: papelito2024 <155123936+papelito2024@users.noreply.github.com>
+Date:   Tue Nov 19 20:08:15 2024 -0300
+
+    Initial commit
