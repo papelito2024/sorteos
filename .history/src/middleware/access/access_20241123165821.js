@@ -1,7 +1,7 @@
 import jsonwebtoken  from "jsonwebtoken";
 import TokenManager from "../../utils/tokenManager/tokenManger.js";
 import AccessError from "../../utils/exceptions/customErrors/accessError.js"
-import AccessExceptions from "../../utils/exceptions/accessException.js"
+import AccessExceptions from "../../utils/exceptions/customErrors/accessException.js"
 
 class Access {
   constructor() {
@@ -21,6 +21,9 @@ class Access {
       this.res = res;
 
       try {
+    
+       
+
         if (privilege == "user")this.decoded= await  this.user() 
 
         if (privilege == "mod")this.decoded = this.mod()
@@ -34,9 +37,8 @@ class Access {
       //  console.log("Asdasd")
        const access= new AccessExceptions(error)
        //
-       access.handler()
-    
-        res.status(401).json(access.getErrorResponseFormat())
+       console.log(access)
+      //  res.status(401).json(accessException.getErrorResponseFormat())
       }
     };
   }

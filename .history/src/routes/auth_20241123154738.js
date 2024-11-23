@@ -13,9 +13,12 @@ const authRouter=Router()
 
 authRouter.post("/signin",access.access("guest"),validation("auth","signin"), authController.signin);
 
+
 authRouter.post("/signup",access.access("guest"),/*validation("auth","signup")*/ authController.signup);
 
-authRouter.post("/signout",access.access("user"),(req,res)=>res.send("asd"));
+
+authRouter.post("signout",access.acccess("user"), authController.signout);
+
 
 authRouter.post("valite/:key", (req, res) => {
   res.send("signin");

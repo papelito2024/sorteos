@@ -21,6 +21,9 @@ class Access {
       this.res = res;
 
       try {
+    
+       
+
         if (privilege == "user")this.decoded= await  this.user() 
 
         if (privilege == "mod")this.decoded = this.mod()

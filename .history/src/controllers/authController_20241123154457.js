@@ -4,7 +4,8 @@ import AuthExceptions from "../utils/exceptions/authExceptions.js";
 import AuthError from "../utils/exceptions/customErrors/authError.js";
 import Users from "../models/users.js";
 import RegisterEmail from "../helpers/mail/register.js";
-import TokenManager from "../utils/tokenManager/tokenManger.js"
+import TokenManager from "../utils/tokenManager/tokenManger.js";
+
 
 class AuthController {
   
@@ -12,7 +13,16 @@ class AuthController {
 
   async signin(req, res, next) {
     try {
-      
+      const user = await Users.findOne(
+        { email: req.body.email },
+        "_id username email rol valid avatar key password"
+      );
+
+      if (user === null) throw new AuthError("invalid credentias", "algo");
+
+      if (!(await user.validatePassword(req.body.password)))
+        throw new AuthError("invalid credentias");
+
 
       /**
        *  generate tokens
@@ -103,31 +113,21 @@ class AuthController {
       });
         */
 
-     
-      const tokenManager = new TokenManager();
-
-      const accessToken = tokenManager.generateAccessToken({ id: user._id });
-      const refreshToken = tokenManager.generateRefreshToken({ id: user._id });
-
-      tokenManager.saveRefreshToken(user._id, refreshToken);
-
-      res.cookie("accessToken", accessToken, {
-        httpOnly: true, // La cookie no es accesible desde JavaScript en el navegador
-        secure: process.env.NODE_ENV === "production", // Solo se enviará sobre HTTPS en producción
-        maxAge: 15 * 60 * 1000, // Duración de la cookie en milisegundos (en este caso, 15 minutos)
-      });
-
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true, // La cookie no es accesible desde JavaScript en el navegador
-        secure: process.env.NODE_ENV === "production", // Solo se enviará sobre HTTPS en producción
-        maxAge: 7 * 24 * 60 * 60 * 1000, // Duración de la cookie en milisegundos (en este caso, 15 minutos)
-      });
-      
+      const accessToken = jsonWebToken.sign(
+        {
+          _id: user._id,
+          username: user.username,
+          rol: user.rol,
+          emial: user.email,
+        },
+        process.env.TOKEN_SECRET,
+        { expiresIn: "1800s" }
+      );
 
        await user.save();
 
 
-    
+      res.cookie.accessToken = accessToken;
 
       //req.session.user=user;
       res.status(200).json({

@@ -1,7 +1,7 @@
 import jsonwebtoken  from "jsonwebtoken";
 import TokenManager from "../../utils/tokenManager/tokenManger.js";
 import AccessError from "../../utils/exceptions/customErrors/accessError.js"
-import AccessExceptions from "../../utils/exceptions/accessException.js"
+import AccessExceptions from "../../utils/exceptions/customErrors/accessError.js"
 
 class Access {
   constructor() {
@@ -13,30 +13,33 @@ class Access {
 
  
   
-   access(privilege) {
+  access(privilege) {
 
 
     return async (req, res, next) => {
       this.req = req;
       this.res = res;
+      this.token = this.getToken();
+     
 
       try {
-        if (privilege == "user")this.decoded= await  this.user() 
+    
+       
 
-        if (privilege == "mod")this.decoded = this.mod()
+        if (privilege == "user") this.user() 
 
-        if (privilege == "admin")this.decoded= this.admin()
+        if (privilege == "mod") if (!this.mod()) throw new Error(); //user
 
-        if (privilege == "guest")this.guest()
+        if (privilege == "admin") if (!this.admin()) throw new Error();
+
+        if (privilege == "guest") if (!this.guest()) throw new Error("you have already started a session");
+
         next();
       } catch (error) {
         
-      //  console.log("Asdasd")
-       const access= new AccessExceptions(error)
-       //
-       access.handler()
-    
-        res.status(401).json(access.getErrorResponseFormat())
+       const accessException= new AccessExceptions(error)
+       accessException.handler()
+        res.status(401).json(accessException.getErrorResponseFormat());
       }
     };
   }
@@ -44,8 +47,7 @@ class Access {
   guest(){
     const accessToken=this.req.cookies.accessToken
 
-    if (accessToken != null)throw new Error("you have already started a session")
-
+    return accessToken!=null
   }
 
   async user() {
@@ -64,28 +66,11 @@ class Access {
   }
 
   mod() {
-
-
-    const decoded = this.user()
-
-    if(decoded.rol == "user")  throw new AccessError(
-      "UNAUTHORIZED",
-      "access denied you dont have permissions for this resoruce"
-    );
-    
-    return decided
+    return 
   }
 
   admin() {
-      const decoded = this.user();
-
-      if (decoded.rol != "admin")
-        throw new AccessError(
-          "UNAUTHORIZED",
-          "access denied you dont have permissions for this resoruce"
-        );
-
-      return decided;
+    return 
   }
 
 

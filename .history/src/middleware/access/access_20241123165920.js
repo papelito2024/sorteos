@@ -21,6 +21,9 @@ class Access {
       this.res = res;
 
       try {
+    
+       
+
         if (privilege == "user")this.decoded= await  this.user() 
 
         if (privilege == "mod")this.decoded = this.mod()
@@ -34,7 +37,6 @@ class Access {
       //  console.log("Asdasd")
        const access= new AccessExceptions(error)
        //
-       access.handler()
     
         res.status(401).json(access.getErrorResponseFormat())
       }

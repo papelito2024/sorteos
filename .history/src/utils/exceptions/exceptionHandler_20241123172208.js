@@ -16,8 +16,6 @@ class ExceptionsHandler {
     */
     this.errorResponse
 
-   
-
     /**
      * @param customErrros
     *  save all custom validations to check what function should it be called

@@ -2,12 +2,6 @@ import ErrorResponse from "./response/errorResponse.js";
 
 class ExceptionsHandler {
   constructor(error) {
-
-    /**
-     *  @param error
-        
-      exception object  error cauth from Error class
-     */
     this.error = error
 
     /**
@@ -15,8 +9,6 @@ class ExceptionsHandler {
       object that defines de json to return inside the response
     */
     this.errorResponse
-
-   
 
     /**
      * @param customErrros

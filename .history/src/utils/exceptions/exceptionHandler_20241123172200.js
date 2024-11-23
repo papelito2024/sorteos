@@ -6,7 +6,7 @@ class ExceptionsHandler {
     /**
      *  @param error
         
-      exception object  error cauth from Error class
+      exception error cauth from Error class
      */
     this.error = error
 
@@ -15,8 +15,6 @@ class ExceptionsHandler {
       object that defines de json to return inside the response
     */
     this.errorResponse
-
-   
 
     /**
      * @param customErrros

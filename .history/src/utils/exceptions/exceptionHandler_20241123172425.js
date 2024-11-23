@@ -16,7 +16,12 @@ class ExceptionsHandler {
     */
     this.errorResponse
 
-   
+    /** 
+      @param error
+      code from the error
+    */
+    this.code = this.error.code
+
 
     /**
      * @param customErrros

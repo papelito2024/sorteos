@@ -52,6 +52,10 @@ const usersSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    
+    refreshToken:{
+      type:String
+    },
 
     key: {
       type: String,

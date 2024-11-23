@@ -1,7 +1,7 @@
 import jsonwebtoken  from "jsonwebtoken";
 import TokenManager from "../../utils/tokenManager/tokenManger.js";
 import AccessError from "../../utils/exceptions/customErrors/accessError.js"
-import AccessExceptions from "../../utils/exceptions/accessException.js"
+import AccessExceptions from "../../utils/exceptions/customErrors/accessError.js"
 
 class Access {
   constructor() {
@@ -13,7 +13,7 @@ class Access {
 
  
   
-   access(privilege) {
+  access(privilege) {
 
 
     return async (req, res, next) => {
@@ -21,7 +21,10 @@ class Access {
       this.res = res;
 
       try {
-        if (privilege == "user")this.decoded= await  this.user() 
+    
+       
+
+        if (privilege == "user")this.decoded=  this.user() 
 
         if (privilege == "mod")this.decoded = this.mod()
 
@@ -31,12 +34,9 @@ class Access {
         next();
       } catch (error) {
         
-      //  console.log("Asdasd")
-       const access= new AccessExceptions(error)
-       //
-       access.handler()
-    
-        res.status(401).json(access.getErrorResponseFormat())
+       const accessException= new AccessExceptions(error)
+       accessException.handler()
+        res.status(401).json(accessException.getErrorResponseFormat())
       }
     };
   }
@@ -77,15 +77,7 @@ class Access {
   }
 
   admin() {
-      const decoded = this.user();
-
-      if (decoded.rol != "admin")
-        throw new AccessError(
-          "UNAUTHORIZED",
-          "access denied you dont have permissions for this resoruce"
-        );
-
-      return decided;
+    return 
   }
 
 

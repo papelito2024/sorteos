@@ -2,21 +2,8 @@ import ErrorResponse from "./response/errorResponse.js";
 
 class ExceptionsHandler {
   constructor(error) {
-
-    /**
-     *  @param error
-        
-      exception object  error cauth from Error class
-     */
     this.error = error
-
-    /**
-    @param errorResponse
-      object that defines de json to return inside the response
-    */
     this.errorResponse
-
-   
 
     /**
      * @param customErrros
@@ -34,8 +21,8 @@ class ExceptionsHandler {
   handler() {
 
     console.log(this.error.name)
-    console.log(this[this.error.name.toLowerCase()]);
-    console.log(this.customErrors.includes(this.error.name));
+    console.log(this.customErrors)
+    console.log(this.customErrors.includes("Access"));
     if(this.customErrors.includes(this.error.name)) return  this[this.error.name.toLowerCase()]();
 
 
