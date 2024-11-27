@@ -48,7 +48,7 @@ const usersSchema = new Schema(
 
     sorteos: [{ type: Schema.Types.ObjectId, ref: "sorteos" }],
 
-    valid: {
+    verified: {
       type: Boolean,
       default: false,
     },
@@ -57,9 +57,22 @@ const usersSchema = new Schema(
       type:String
     },
 
-    key: {
-      type: String,
-    },
+    tokens:[
+      {
+
+        tokenType: {
+          type: String,
+
+        },
+        token: {
+          type: String
+        },
+        expire: {
+          type: Date,
+          default: Date.now() + (1000 * 60 * 30)
+        }
+      }
+    ], 
 
     avatar: {
       type: String,
@@ -76,7 +89,11 @@ usersSchema.pre("save", async function (next) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     //generate key activate hash
-    this.key = await bcrypt.hash(this.email + this.user, salt);
+    this.tokens.push( {
+      tokenType:"verify",
+      token: await bcrypt.hash(this.email + this.user, salt),
+      expired: Date.now() + (1000 * 60 * 60 * 24)
+    })
 
     return next();
   } catch (error) {
@@ -84,10 +101,28 @@ usersSchema.pre("save", async function (next) {
   }
 });
 
-usersSchema.methods.generateKey = async function (key) {
-  const salt = await bcrypt.genSalt(10);
-  this.key = await bcrypt.hash(this.email + this.user, salt);
-  return this.key == key;
+usersSchema.methods.generateToken = async function ({type,key,expiration}) {
+
+  const salt = await bcrypt.genSalt(10)
+  const token= await bcrypt.hash(key, salt)
+
+  this.tokens.push({
+    tokenType: type,
+    token: token,
+    expire:expiration
+  }) 
+
+   await  this.save()
+  return  token
+};
+
+usersSchema.methods.generateHash = async function (data) {
+
+  const salt = await bcrypt.genSalt(10)
+  const hash = await bcrypt.hash(data, salt)
+
+
+  return hash
 };
 
 usersSchema.methods.validatePassword = async function validatePassword(data) {
@@ -102,3 +137,38 @@ const Users = mongoose.model("Users", usersSchema);
 
 
 export default Users
+
+
+
+/*
+actualizar el objecto de  un path tipo arreglo ejemplo
+Producto.updateOne(
+  { nombre: 'Producto A' },
+  { $set: { 'items.$[elem].cantidad': 10 } }, // Cambia la cantidad de un objeto específico
+  { arrayFilters: [{ 'elem.tipo': 'A' }] }, // Filtro para el objeto que quieres actualizar
+  (err, result) => {
+    if (err) return console.error(err);
+    console.log(result);  // Resultado de la actualización
+  }
+); 
+
+eliminar un objeto de un path tipo arreglo
+
+Producto.updateOne(
+  { nombre: 'Producto A' },
+  { $pull: { items: { _id: 'id_del_objeto' } } },
+  (err, result) => {
+    if (err) return console.error(err);
+    console.log(result);  // Muestra el resultado de la operación
+  }
+);
+
+Producto.updateOne(
+  { nombre: 'Producto A' }, // Filtro para el producto
+  { $pull: { items: { tipo: 'A' } } }, // Eliminar el objeto del arreglo que tenga tipo 'A'
+  (err, result) => {
+    if (err) return console.error(err);
+    console.log(result);  // Muestra el resultado de la operación
+  }
+);
+ */

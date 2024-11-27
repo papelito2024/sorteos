@@ -48,12 +48,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 /*
 */
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false },
- 
+  saveUninitialized:false,
+  cookie: { 
+    secure: process.env.ENV=="production"  },
+    maxAge: 1000 * 60 * 30,
 }))
+
+
 
 
 /**
