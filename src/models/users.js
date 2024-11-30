@@ -59,7 +59,6 @@ const usersSchema = new Schema(
 
     tokens:[
       {
-
         tokenType: {
           type: String,
 
@@ -84,10 +83,11 @@ const usersSchema = new Schema(
 
 usersSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
+  
   try {
     //generate password hash
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+   
+    this.password = await this.generateHash(this.password)
     //generate key activate hash
     this.tokens.push( {
       tokenType:"verify",
@@ -101,11 +101,10 @@ usersSchema.pre("save", async function (next) {
   }
 });
 
-usersSchema.methods.generateToken = async function ({type,key,expiration}) {
+usersSchema.methods.generateToken = async function ({type,expiration}) {
 
-  const salt = await bcrypt.genSalt(10)
-  const token= await bcrypt.hash(key, salt)
-
+  const token = await this.generateHash(this._id)
+  
   this.tokens.push({
     tokenType: type,
     token: token,

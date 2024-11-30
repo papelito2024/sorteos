@@ -3,11 +3,12 @@ import { ForgotService, SignupService, SigninService, VerifyService, RefreshServ
 import AuthExceptions from "../utils/exceptions/authExceptions.js"
 import Controller from "./controller.js"
 
+
+
 export default class AuthController {
 
     constructor() {
-        
-       
+      
     }
 
     async signin(req, res, next) {
@@ -15,7 +16,7 @@ export default class AuthController {
 
         try {
 
-            const signin= new SigninService({
+            const signin= new SigninService(req,res,{
                 email:req.body.email,
                 password:req.body.password
             })
@@ -23,13 +24,13 @@ export default class AuthController {
            const user = await  signin.validateAccess()
 
 
-            const{accessToken,refreshToken}=signin.generateTokens(user._id)
+            const{accessToken,refreshToken}=signin.generateTokens()
 
           
-           signin.setCookies(res,accessToken,refreshToken)
+           signin.setCookies()
 
 
-            signin.startSession(req,user)
+            signin.startSession()
 
 
             res.status(200).json({
@@ -57,30 +58,21 @@ export default class AuthController {
 
     async signup(req,res,next){
 
-
+        console.log("Asdasdasd")
         try {
             
-            const signup = new SignupService()
+            const signup = new SignupService(req, res, req.body)
+
+            const user = await  signup.saveUser()
+          
+            signup.generateTokens()
 
 
-            const user =await  signup.saveUser(req.body)
-
-
-
-            const { accessToken, refreshToken } = signup.generateTokens(user._id)
-
-
-            signup.setCookies(res, accessToken, refreshToken)
+            signup.setCookies()
 
             
-            signup.startSession(req,user)
-        /*   
-            signupService.sendEmail({
-                email:user.email,
-                token:user.tokens[0].token,
-                username:user.usernmae
-            }) */
-
+            signup.startSession()
+      
 
             res.status(200).json({
                 status:"success",
@@ -100,12 +92,16 @@ export default class AuthController {
         
     }
 
-    signout(req,res,next){
+    async signout(req,res,next){
+        try {
+            if (req.session.user) req.session.destroy()
 
-        if (req.session.user) req.session.destroy()
-
-        if (res.cookies.accessToken) res.clearCookie("accessToken")
-        if (res.cookies.accessToken) res.clearCookie("refreshToken")
+            if (req.cookies.accessToken) res.clearCookie("accessToken")
+            if (req.cookies.accessToken) res.clearCookie("refreshToken")
+        } catch (error) {
+            console.log(error)
+        }
+       
 
         return res.status(200).json({
             status: "success",
@@ -115,29 +111,70 @@ export default class AuthController {
     }
 
 
-    forgot(req,res,next){
+    forgot(req, res, next) {
 
-       try {
+        try {
+
+
+            const forgot = new ForgotService(req, res, { key, ...req.body })
             const key = req.params.key
 
-            if (key =="send"){
+            if (key == "send-email") {
 
+
+                forgot.getUserFromDb()
+
+
+                forgot.generateExpireToken()
+
+                forgot.sendEmail()
 
                 /**
-              * send the response to the client
-              */
+            * send the response to the client
+            */
+
 
                 return res.status(201).json({
                     status: "success",
                     messagge: "email sended succesfully",
 
                 })
+
+            } else if (key == "reset-password") {
+
+                this.resetPassword()
+
+                return res.status(201).json({
+                    status: "success",
+                    messagge: "password changed successfully",
+
+                })
             }
+
+            else {
+
+                forgot.checkTokens()
+
+                return res.status(201).json({
+                    status: "success",
+                    messagge: "tokenes checked useer verificated",
+
+                })
+
+            }
+
+
+
+        } catch (error) {
+
             
-        
-       } catch (error) {
-        
-       }
+            const auth = new AuthExceptions(error)
+
+            auth.handler()
+
+            return res.status(401).json(auth.getErrorResponseFormat())
+
+        }
     }
 
 
@@ -162,7 +199,7 @@ export default class AuthController {
         }
        
     }
-
+ 
 
     refresh(){
         

@@ -29,15 +29,17 @@ class Access {
         if (privilege == "admin")this.decoded= this.admin()
 
         if (privilege == "guest")this.guest()
-        next();
+
+         next();
+
       } catch (error) {
         
-      //  console.log("Asdasd")
+        console.log("Asdasd")
        const access= new AccessExceptions(error)
        //
        access.handler()
     
-        res.status(401).json(access.getErrorResponseFormat())
+       return  res.status(401).json(access.getErrorResponseFormat())
       }
     };
   }
@@ -59,11 +61,11 @@ class Access {
 
     //console.log(accessToken)
 
-    if(accessToken==null) throw new AccessError("UNDEFINED","access denied you must start a session");
+    if(accessToken==null) throw new AccessError("UNDEFINED","access denied you must start a session")
     
     const decoded = await tokenManager.verifyToken(accessToken,process.env.JWT_ACCESS_TOKEN_SECRET)
-    
-    if(!decoded) throw new AccessError("EXPIRED"," error invalid broken or expired  access token");
+   
+    if(!decoded) throw new AccessError("EXPIRED"," error invalid broken or expired  access token")
 
     return decoded
   }

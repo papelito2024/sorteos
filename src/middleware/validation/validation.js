@@ -26,6 +26,7 @@ const validation = (file, validation) => {
       const auth = new AuthExceptions(error);
       
       auth.handler()
+      
       return auth.getErrorResponseFormat()
    }
   }

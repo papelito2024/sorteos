@@ -46,7 +46,7 @@ class TokenManager {
   
 
 
-
+ 
   // Generar un refresh token
   generateRefreshToken() {
     this.refreshToken= jsonwebtoken.sign(
@@ -62,13 +62,10 @@ class TokenManager {
 
   // Verificar un refresh token
   async verifyToken(token,secret) {
-    try {
       const decoded = await jsonwebtoken.verify(token, secret);
      // console.log(decoded)
-      return decoded.userId;
-    } catch (error) {
-      return null;
-    }
+      return decoded;
+    
   }
 
   async decodeToken(token,secret){

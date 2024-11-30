@@ -7,7 +7,7 @@ class AccessExceptions extends ExceptionHandler {
 
   access() {
 
-    
+    console.log(this.error)
     if (this.error.code == "SESSION_EXISITS") {
       this.setErrorReponse({
         message: `${this.error.name} ${this.error.message}`,
@@ -21,6 +21,8 @@ class AccessExceptions extends ExceptionHandler {
 
 
     if(this.error.code=="EXPIRED"){
+
+
          this.setErrorReponse({
            message: `${this.error.name} ${this.error.message}`,
            code: 401,

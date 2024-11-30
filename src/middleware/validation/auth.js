@@ -47,7 +47,7 @@ module.exports = {
 
     ],
 
-    forgotPassword: [
+    forgot: [
         body('email')
             .optional()
             .isLength(1).withMessage("this fiel must  have at least 1 characters")

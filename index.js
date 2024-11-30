@@ -6,14 +6,13 @@
 
 import app from "./src/app.js"
 
-import debug from "debug"
 
-const logger = debug("app:express")
 
 import http from "http"
 
 
 import mongoose from "mongoose"
+
 
 
 /**
@@ -26,10 +25,10 @@ import mongoose from "mongoose"
 main()
   .then(() => console.log("database connected"))
   .catch((err) => {
-   logger(err);
+   console.log(err);
     process.exit(0);
   });
-
+ 
 async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/sorteos");
 
@@ -40,7 +39,7 @@ async function main() {
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || "3000");
+var port = normalizePort(process.env.PORT || "4000");
 app.set("port", port);
 app.set("hostname", "localhost:" + port);
 
@@ -108,10 +107,12 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
+
+
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
     //console.log(debug)
-    logger("Listening on " + bind);
+   
    
 }

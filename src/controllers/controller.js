@@ -1,3 +1,5 @@
+import Users from "../models/users"
+
 
 class Controller {
   constructor(req,res) {
@@ -5,17 +7,46 @@ class Controller {
 
     this.res=res
 
+    this.auth
   }
 
-  setReponse(...ob) {
-    this.response = {
-      type: path.join(process.env.HOSTNAME, type ?? "apidoc"),
-      detail: detail ?? "",
-      status: status ?? 200,
-      errors: errors ?? {},
-    };
+
+  async getUser() {
+    const user = await Users.findOne({ email: this.user.email })
+
+    this.user = user
   }
 
+  setAuthenticatedUser(){
+    
+      if(!this.req.cookies.accessToken) throw new Error("not authenticated user")
+
+      
+  }
+  
+  getAuthenticatedUer(){
+
+    return this.auth.isAuthenticated ? this.auth.user : false
+  }
+  
+  isAuthenticated(){
+    
+    return !this.req.cookies.accessToken ? false : true 
+  }
+
+
+  successResponse(){
+
+
+  }
+
+
+  errorResponse(){
+
+    
+  }
+
+  
 
   
 

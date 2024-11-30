@@ -1,4 +1,4 @@
-import ErrorResponse from "./response/errorResponse.js";
+import ErrorResponse from "../response/errorResponse.js";
 
 class ExceptionsHandler {
   constructor(error) {
@@ -33,9 +33,7 @@ class ExceptionsHandler {
 
   handler() {
 
-    //console.log(this.error.name)
-    //console.log(this[this.error.name.toLowerCase()]);
-    //console.log(this.customErrors.includes(this.error.name));
+
     if(this.customErrors.includes(this.error.name)) return  this[this.error.name.toLowerCase()]();
 
 
@@ -44,7 +42,7 @@ class ExceptionsHandler {
 
   getErrorResponseFormat() {
 
-    console.log(this.errorResponse)
+   // console.log(this.errorResponse)
     return this.errorResponse.getResponse();
   }
 
@@ -61,6 +59,26 @@ class ExceptionsHandler {
       type: [process.env.HOSTNAME, "errors", "application"].join("/"),
       errors: {},
     });
+  }
+
+  mongo() {
+    if(this.error.ErrorResponse.code == 11000){
+
+      super.setErrorReponse({
+        message: `Validation Error `,
+        code: 401,
+        type: [process.env.HOSTNAME, "errors", this.error?.name].join("/"),
+        errors: {
+          email: "invalid credentials",
+          password: "invalid credentials",
+        },
+      });
+
+    }
+
+    
+
+
   }
 
   validation() {

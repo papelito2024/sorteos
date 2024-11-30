@@ -15,13 +15,13 @@ const authRouter=Router()
 
 authRouter.post("/signin",access.access("guest"),validation("auth","signin"),authController.signin);
 
-authRouter.post("/signup", access.access("guest"), validation("auth", "signup"), authController.signup);
+authRouter.post("/signup",  access.access("guest"), validation("auth", "signup"),  authController.signup);
 
-authRouter.post("/signout", access.access("user"), authController.signout);
+authRouter.post("/signout", access.access("user"),authController.signout);
 
 authRouter.post("valite/:key", authController.verify);
 
-authRouter.post("forgot/:key", authController.forgot);
+authRouter.post("forgot/:key", access.access("guest"), validation("auth", "forgot"), authController.forgot);
 
 authRouter.post("/refresh-token", authController.refresh);
 
