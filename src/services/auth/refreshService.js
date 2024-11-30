@@ -1,10 +1,25 @@
- async refreshToken(req, res, next) {
 
-    const { refreshToken } = req.cookies;
+import Users from "../../models/users.js";
+import TokenManager from "../../utils/tokenManager/tokenManger.js";
+
+
+export default class RefreshService {
+    constructor(parameters) {
+        
+    }
+
+    async checkRefreshToken({refresh}){
+
+        
+    }
+
+async refreshToken({refreshToken,}) {
+
+   
 
     const tokenManager = new TokenManager({})
 
-    try {
+   
         if (!refreshToken) throw new AccessError("UNDEFINED", " refresh token not found ");
 
         // Verificar si el refresh token es válido
@@ -36,17 +51,10 @@
         });
 
 
-    } catch (error) {
-        const auth = new AuthExceptions(error);
-
-        auth.handler();
-
-        return res.status(401).json(auth.getErrorResponseFormat())
-    }
+   
 
 
 
 
-
+    } 
 }
-

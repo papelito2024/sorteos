@@ -1,4 +1,4 @@
-import Mailer from "../../services/mailer/mailer.js";
+import Mailer from "../../utils/mailer/mailer.js";
 
 
 class resetPasswordEmail extends Mailer {

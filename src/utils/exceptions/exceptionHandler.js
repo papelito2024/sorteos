@@ -33,9 +33,9 @@ class ExceptionsHandler {
 
   handler() {
 
-    console.log(this.error.name)
-    console.log(this[this.error.name.toLowerCase()]);
-    console.log(this.customErrors.includes(this.error.name));
+    //console.log(this.error.name)
+    //console.log(this[this.error.name.toLowerCase()]);
+    //console.log(this.customErrors.includes(this.error.name));
     if(this.customErrors.includes(this.error.name)) return  this[this.error.name.toLowerCase()]();
 
 

@@ -1,7 +1,10 @@
 
 class Controller {
-  constructor() {
-    this.response = {};
+  constructor(req,res) {
+    this.req=req
+
+    this.res=res
+
   }
 
   setReponse(...ob) {
@@ -12,6 +15,9 @@ class Controller {
       errors: errors ?? {},
     };
   }
+
+
+  
 
   async get(params, pagination = {}) {
     let result = null;
@@ -27,6 +33,21 @@ class Controller {
         error: "error qlo",
       };
     }
+  }
+
+
+  createCookie({
+    name,
+    data,
+    options
+  }) {
+
+
+   this. res.cookie("accessToken", accessToken, {
+      httpOnly:options.httpOnly?? process.env.ENV == "production", // La cookie no es accesible desde JavaScript en el navegador
+      secure: process.env.NODE_ENV === "production", // Solo se enviará sobre HTTPS en producción
+      maxAge:options.maxAge??  15 * 60 * 1000, // Duración de la cookie en milisegundos (en este caso, 15 minutos)
+    });
   }
 }
 

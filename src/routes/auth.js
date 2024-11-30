@@ -1,10 +1,10 @@
-import { Router } from "express";
+import { Router } from "express"
 
 import validation from "../middleware/validation/validation.js"
 
-import Access from "../middleware/access/access.js";
+import Access from "../middleware/access/access.js"
 
-import {forgotMiddlewares,verifyMiddleware} from "../middleware/auth/index.js"
+import AuthController from "../controllers/authController.js"
 
 const authController = new AuthController()
 const access = new Access()
@@ -13,17 +13,17 @@ const authRouter=Router()
 
 
 
-authRouter.post("/signin",access.access("guest"),validation("auth","signin"),(req,res)=>res.send("asd"));
+authRouter.post("/signin",access.access("guest"),validation("auth","signin"),authController.signin);
 
-authRouter.post("/signup", access.access("guest"),/*validation("auth","signup")*/(req, res) => res.send("asd"));
+authRouter.post("/signup", access.access("guest"), validation("auth", "signup"), authController.signup);
 
-authRouter.post("/signout", access.access("user")(req, res)=> res.send("asd"));
+authRouter.post("/signout", access.access("user"), authController.signout);
 
-authRouter.post("valite/:key", verifyMiddleware);
+authRouter.post("valite/:key", authController.verify);
 
-authRouter.post("forgot/:key", forgotMiddlewares);
+authRouter.post("forgot/:key", authController.forgot);
 
-authRouter.post("/refresh-token", (req, res) => res.send("asd"));
+authRouter.post("/refresh-token", authController.refresh);
 
 
 

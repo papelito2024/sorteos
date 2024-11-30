@@ -4,6 +4,7 @@ import AccessError from "../../utils/exceptions/customErrors/accessError.js"
 import AccessExceptions from "../../utils/exceptions/accessException.js"
 
 class Access {
+  
   constructor() {
     this.req;
     this.res;
@@ -44,15 +45,19 @@ class Access {
   guest(){
     const accessToken=this.req.cookies.accessToken
 
-    if (accessToken != null)throw new Error("you have already started a session")
+    if (accessToken != null)throw new  AccessError("SESSION_EXISITS","you have already started a session")
 
   }
 
+
   async user() {
     
-    const tokenManager = new TokenManager();
+    const tokenManager = new TokenManager({});
 
     const accessToken = this.req.cookies.accessToken;
+   // console.log(this.req.cookies)
+
+    //console.log(accessToken)
 
     if(accessToken==null) throw new AccessError("UNDEFINED","access denied you must start a session");
     
@@ -85,7 +90,7 @@ class Access {
           "access denied you dont have permissions for this resoruce"
         );
 
-      return decided;
+      return decOded;
   }
 
 
