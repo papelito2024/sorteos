@@ -19,9 +19,9 @@ authRouter.post("/signup",  access.access("guest"), validation("auth", "signup")
 
 authRouter.post("/signout", access.access("user"),authController.signout);
 
-authRouter.post("valite/:key", authController.verify);
+authRouter.post("/verify/:key", access.access("user"), authController.verify );
 
-authRouter.post("forgot/:key", access.access("guest"), validation("auth", "forgot"), authController.forgot);
+authRouter.post("/forgot/:key", access.access("guest"), validation("auth", "forgot"), authController.forgot);
 
 authRouter.post("/refresh-token", authController.refresh);
 

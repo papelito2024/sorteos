@@ -79,14 +79,18 @@ class TokenManager {
     
   }
 
-  async saveRefreshToken (userId, refreshToken) {
+  async saveRefreshToken (refreshToken) {
     const user = await Users.findOne({_id:this.data._id});
     if (user) {
        // console.log(user)
+
+       if(user.tokens.find(t=>t.tokenType=="refresh")) return 
+
+
       user.tokens.push({
         tokenType:"refresh",
         token: refreshToken,
-        
+         
       }) 
       
       await user.save()

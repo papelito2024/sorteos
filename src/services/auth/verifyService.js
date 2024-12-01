@@ -1,54 +1,46 @@
 import TokenManager from "../../utils/tokenManager/tokenManger.js"
 import Users from "../../models/users.js"
 import RegisterEmail from "../../helpers/mail/register.js"
+import AuthService from "./authServices.js"
 
 
 
-export default class verifyService {
-    constructor(parameters) {
-        
+export default class verifyService extends AuthService{
+    constructor(req,res) {
+        super(req,res)
     }
 
 
-checkKey  (req, res, next) {
- 
-        if (!req.params.key) throw new Error("key doenst eixst bitches");
 
 
-}
 
+async resend  () {
 
-async resend  ({access}) {
-
-       // if (!req.params.key == "resend") next();
 
         /**
          * access token needed only a logged user can askt for a new email for verify account
          */
-      //  const access = req.cookies.access
+      
         const secret = process.env.JWT_ACCESS_TOKEN_SECRET
         const token = new TokenManager({})
-        /**
-         * decodde  the token to get the data
-         */
-        const { _id, email } = token.decodeToken(access, secret)
 
-        /**
-         * get the user
-         */
-        const user = await Users.findOne({ _id: _id })
+        
+        const user =await  this.getUserFromToken()
 
-        const key = user.generateToken({ type: "verify", key: _id, expiration: new Date.now() + (1000 * 60 * 60 * 24) })
+        console.log(user)
 
+        const key = await user.generateToken({ type: "verify", key:user._id.toString(), expiration:  Date.now() + (1000 * 60 * 60 * 24) })
+
+        console.log(key)
         /***
         *  send email
         */
-        await registerEmail({
+      /*  await registerEmail({
             to: user.email,
             key: key,
             username: user.username,
             subject: "registration account verifing"
-        })
+        })*/
 
      
 
@@ -58,7 +50,7 @@ async resend  ({access}) {
 
 
 
- async verify  ({key,access}) {
+ async checkTokens  (key) {
  
         
         /*  *
@@ -68,25 +60,31 @@ async resend  ({access}) {
 
         const secret = process.env.JWT_ACCESS_TOKEN_SECRET
         const token = new TokenManager({})
-        const { _id, email } = token.decodeToken(access, secret)
+
+
+     const user =await  this.getUserFromToken()
 
 
         /**
          * get the key from the db
          */
 
-        const user = await Users.findOne({ _id: _id, "tokens.tokenType": "verify" })
+      
 
-        const userKey = user.tokens.find(token => token.type)
+        const userKey = user.tokens.find(token => token.tokenType == "verify")
+
+        console.log(userKey)
 
         /**
          * check expiration 
          */
-        if (userKey.expire < Date.now()) throw new Error("verify account token corrupt or expired ");
+        if (Date(userKey.expire) < Date.now()) throw new Error("verify account token corrupt or expired ");
         /**
          * compare each key if they match
-         */
+         */  
 
+        console.log(key)
+        console.log(userKey.token)
         if (key != userKey.token) throw new Error("verify account token corrupt or expired ");
 
 
@@ -102,11 +100,7 @@ async resend  ({access}) {
         /**
          * send the succes message to the client
          */
-        return res.status(201).json({
-            status: "sucess",
-            message: "account verified successfully"
-        })
-
+      
    
 
     }

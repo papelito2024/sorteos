@@ -17,8 +17,9 @@ export default class AuthService {
     async getUserFromToken(){
 
         const dec = await this.tokenManager.verifyToken(this.accessToken,process.env.JWT_ACCESS_TOKEN_SECRET)
-    
-        const user = await Users.find({_id:dec._id})
+        console.log(dec)
+
+        const user = await Users.findOne({_id:dec.id})
 
         this.user = user
 
@@ -68,7 +69,7 @@ export default class AuthService {
         this. refreshToken = tokenManager.generateRefreshToken()
        // console.log(this.accessToken)
 
-        tokenManager.saveRefreshToken()
+        tokenManager.saveRefreshToken(this.refreshToken)
 
         
     }

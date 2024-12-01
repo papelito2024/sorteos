@@ -181,14 +181,57 @@ export default class AuthController {
     verify(req,res,next){
         try {
 
+            const key =req.params.key
+            const verify = new VerifyService(req,res)
+            /*
+            1 make to be sure first that the user has a session already by checking the access token
+              1a-if the user doenst havee athe accesstoken then we take a look for the refresh
+              1b-otherwise send the user to loggin
+
+            2 step check the key value  if is resend then send a new email verify to the user  
+                2a-send the email to the user 
+            
+            */
+            
+            if(key=="resend"){
 
 
+                verify.resend()
 
-            return res.status(201).json({
-                status: "success",
-                messagge: "email sended succesfully",
+                return res.status(201).json({
+                    status: "success",
+                    messagge: "email sended succesfully",
 
-            })
+                })
+
+            }
+            /*
+            3-if we get the key we need to fetch the coonfirm token from the db user and 
+                3a- check expiration if it is expired then send a error response 
+            */
+
+            else{
+            
+                verify.checkTokens(key)
+
+
+                return res.status(201).json({
+                    status: "success",
+                    messagge: "user email verified correctly",
+
+                })
+                
+            }
+                /*
+            4 if the confirm token is valid we need to check if they match we need to be sure that the key 
+            in the request is the same generated when sent the email 
+                4a- if not match then the key is corrupted or alter 
+            
+            5 if everything its ok then snd a success messsage and update the user verified property 
+            a
+             */
+
+            
         } catch (error) {
 
             return res.status(401).json({

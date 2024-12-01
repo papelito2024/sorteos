@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt"
+import { v4 as uuidv4 } from 'uuid';
 
 const Schema = mongoose.Schema;
 
@@ -86,34 +87,36 @@ usersSchema.pre("save", async function (next) {
   
   try {
     //generate password hash
-   
-    this.password = await this.generateHash(this.password)
+    this.password =await  this.generateHash(this.password)
     //generate key activate hash
-    this.tokens.push( {
-      tokenType:"verify",
-      token: await bcrypt.hash(this.email + this.user, salt),
-      expired: Date.now() + (1000 * 60 * 60 * 24)
-    })
+
+    const token = this.generateToken({ type: "verify", expire:Date.now() + (1000 * 60 * 60 * 24) })
+    
 
     return next();
   } catch (error) {
-    return next(erro);
+    return next(error);
   }
 });
 
 usersSchema.methods.generateToken = async function ({type,expiration}) {
 
-  const token = await this.generateHash(this._id)
+  const token = uuidv4().replace(/[\/-]/g, '');
   
-  this.tokens.push({
+  const tDoc ={
     tokenType: type,
-    token: token,
-    expire:expiration
-  }) 
+      token: token,
+        expire: expiration
+  }
 
+  this.tokens= this.tokens.map(token=>token.tokenType==type ? tDoc : token )
+  
    await  this.save()
+
   return  token
 };
+
+
 
 usersSchema.methods.generateHash = async function (data) {
 
