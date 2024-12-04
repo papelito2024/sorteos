@@ -6,8 +6,12 @@ import Access from "../middleware/access/access.js"
 
 import AuthController from "../controllers/authController.js"
 
+
+
 const authController = new AuthController()
+
 const access = new Access()
+
 const authRouter=Router()
  
 
@@ -23,7 +27,7 @@ authRouter.post("/verify/:key", access.access("user"), authController.verify );
 
 authRouter.post("/forgot/:key", access.access("guest"), validation("auth", "forgot"), authController.forgot);
 
-authRouter.post("/refresh-token", authController.refresh);
+authRouter.post("/refresh-token", access.access("guest") ,authController.refresh);
 
 
 

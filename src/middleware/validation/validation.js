@@ -13,12 +13,14 @@ const validation = (file, validation) => {
    
    try {
    
-      const module =  await import(`../../helpers/validations/${file}.js`)
 
-      if (!module.default[validation])  throw new Error(`validation doenst exists in file ${file}.js`);
+      const module =  await import(`./${file}.js`)
 
-     // console.log(module.default[validation])
-      return module.default[validation]
+    
+      if (!module.validation[validation])  throw new Error(`validation doenst exists in file ${file}.js`);
+
+   //   console.log(module)
+      return module.validation[validation]
 
     } catch (error) {
 
@@ -36,8 +38,10 @@ const validation = (file, validation) => {
    * middleware function 
    */
   return async (req, res, next) => {
+
     const validations = await getValidations();
 
+    //console.log(validations)
     if (!Array.isArray(validations)) {
       return res.status(409).json(validations);
     }
@@ -45,6 +49,8 @@ const validation = (file, validation) => {
     const errors = {};
 
     for (const validation of validations) {
+     
+     
       const result = await validation.run(req);
       if (!result.isEmpty()) {
         result.array().map((e) => {
@@ -63,7 +69,7 @@ const validation = (file, validation) => {
 
      const auth = new AuthExceptions({
        name: "Validation",
-       message: "validation error: invalid data recived",
+       message: " invalid data recived",
        errors: errors,
      });
      auth.handler();

@@ -2,84 +2,53 @@ import Users from "../models/users.js"
 
 
 class Controller {
-  constructor(req,res) {
-    this.req=req
-
-    this.res=res
-
-    this.auth
-  }
 
 
-  async getUser() {
-    const user = await Users.findOne({ email: this.user.email })
-
-    this.user = user
-  }
-
-  setAuthenticatedUser(){
+  constructor() {
     
-      if(!this.req.cookies.accessToken) throw new Error("not authenticated user")
+  } 
+
+
+  
+  setCookie({key,data,expriration}){
 
       
-  }
-  
-  getAuthenticatedUer(){
 
-    return this.auth.isAuthenticated ? this.auth.user : false
-  }
-  
-  isAuthenticated(){
-    
-    return !this.req.cookies.accessToken ? false : true 
-  }
+    this.res.cookie(key, data, {
 
+      /**
+       * default value false for development 
+       */
+      httpOnly: this.isProductionMode, 
 
-  successResponse(){
-
-
-  }
-
-
-  errorResponse(){
-
+      /**
+       * default value false por development
+       */
+      secure: this.isProductionMode, 
+      
+      /**
+       * default value for cookies 1 day of expiration
+       */
+      maxAge:expiration ?? 24 * 60 * 60 * 1000, 
+    });
     
   }
-
   
 
   
 
-  async get(params, pagination = {}) {
+  async get(filter, pagination = {}) {
     let result = null;
-    try {
-      if (pagination)
-        pagination.skip = pagination.limit * (pagination.page - 1);
+    
+      if (pagination)  pagination.skip = pagination.limit * (pagination.page - 1);
 
-      result = await Sorteos.find(params, pagination);
+      result = await Sorteos.find(filter, pagination);
 
       return result;
-    } catch (error) {
-      result = {
-        error: "error qlo",
-      };
-    }
+    
   }
 
 
-  createCookie({
-    name,
-    data,
-    options
-  }) {
-
-
-   this. res.cookie("accessToken", accessToken, {
-      httpOnly:options.httpOnly?? process.env.ENV == "production", // La cookie no es accesible desde JavaScript en el navegador
-      secure: process.env.NODE_ENV === "production", // Solo se enviará sobre HTTPS en producción
-      maxAge:options.maxAge??  15 * 60 * 1000, // Duración de la cookie en milisegundos (en este caso, 15 minutos)
-    });
-  }
 }
 
 export default Controller

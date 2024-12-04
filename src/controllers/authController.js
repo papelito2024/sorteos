@@ -5,10 +5,10 @@ import Controller from "./controller.js"
 
 
 
-export default class AuthController {
+export default class AuthController extends Controller {
 
     constructor() {
-      
+      super()
     }
 
     async signin(req, res, next) {
@@ -45,7 +45,7 @@ export default class AuthController {
 
         } catch (error) {
 
-            console.log("Asdasdasd")
+            
             const auth = new AuthExceptions(error)
 
             auth.handler()
@@ -58,10 +58,10 @@ export default class AuthController {
 
     async signup(req,res,next){
 
-        console.log("Asdasdasd")
+       
         try {
             
-            const signup = new SignupService(req, res, req.body)
+            const signup = new SignupService(req,res,req.body)
 
             const user = await  signup.saveUser()
           
@@ -71,7 +71,7 @@ export default class AuthController {
             signup.setCookies()
 
             
-            signup.startSession()
+          //  signup.startSession()
       
 
             res.status(200).json({
@@ -244,8 +244,24 @@ export default class AuthController {
     }
  
 
-    refresh(){
-        
+    refresh(req,res,next){
+
+        try {
+            
+            const refresh = new RefreshService()
+
+
+            refresh.refreshToken()
+
+        } catch (error) {
+
+            const auth = new AuthExceptions(error)
+
+            auth.handler()
+
+            return res.status(401).json(auth.getErrorResponseFormat())
+            
+        }
     }
 
 }

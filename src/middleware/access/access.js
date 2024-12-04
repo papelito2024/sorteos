@@ -24,17 +24,18 @@ class Access {
       try {
         if (privilege == "user")this.decoded= await  this.user() 
 
-        if (privilege == "mod")this.decoded = this.mod()
+        if (privilege == "mod")this.decoded = await this.mod()
 
-        if (privilege == "admin")this.decoded= this.admin()
+        if (privilege == "admin")this.decoded=await  this.admin()
 
         if (privilege == "guest")this.guest()
 
+          console.log("asdasd")
          next();
 
       } catch (error) {
         
-        console.log("Asdasd")
+        console.log("Asdasd1111")
        const access= new AccessExceptions(error)
        //
        access.handler()
@@ -51,7 +52,6 @@ class Access {
 
   }
 
-
   async user() {
     
     const tokenManager = new TokenManager({});
@@ -61,7 +61,7 @@ class Access {
 
     //console.log(accessToken)
 
-    if(accessToken==null) throw new AccessError("UNDEFINED","access denied you must start a session")
+    if(!accessToken) throw new AccessError("UNDEFINED","access denied you must start a session")
     
     const decoded = await tokenManager.verifyToken(accessToken,process.env.JWT_ACCESS_TOKEN_SECRET)
    
@@ -72,15 +72,17 @@ class Access {
 
   mod() {
 
-
+    console.log("mod")
     const decoded = this.user()
+    console.log("out user")
 
     if(decoded.rol == "user")  throw new AccessError(
       "UNAUTHORIZED",
       "access denied you dont have permissions for this resoruce"
     );
     
-    return decided
+    console.log("asda")
+    return decoded
   }
 
   admin() {

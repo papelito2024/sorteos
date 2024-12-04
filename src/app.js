@@ -47,7 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /*
 */
-app.use(session({
+/* app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized:false,
@@ -56,7 +56,7 @@ app.use(session({
     maxAge: 1000 * 60 * 30,
 }))
 
-
+ */
 
 
 /**
@@ -65,11 +65,12 @@ app.use(session({
 
 
 import  authRouter from "./routes/auth.js"
+import rafflesRouter from "./routes/raffles.js"
 //console.log(authRouter)
 
 app.use("/auth",authRouter)
 
-
+app.use("/raffles", rafflesRouter)
 
 ///////////asdasssssssasdasd
 

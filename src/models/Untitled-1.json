@@ -1,0 +1,35 @@
+{
+  "title": "Gran Sorteo de Navidad",
+  "description": "¡Participa en el Gran Sorteo de Navidad y gana premios increíbles! Solo debes seguir los pasos sencillos.",
+  "body": "[b]¡Bienvenidos al Gran Sorteo de Navidad![/b]\n\n[i]¡No te pierdas la oportunidad de ganar premios fantásticos este fin de año![/i]\n\n[ul]\n[li]Fecha de inicio: 1 de diciembre de 2024[/li]\n[li]Fecha de finalización: 24 de diciembre de 2024[/li]\n[li]Premio principal: Un paquete exclusivo de productos navideños[/li]\n[li]Para participar, solo sigue estos pasos: [/li]\n[li]1. Haz clic en el enlace para registrarte.[/li]\n[li]2. Completa el formulario de participación.[/li]\n[li]3. ¡Ya estarás participando para ganar![/li]\n[/ul]\n\n[b]¡No pierdas la oportunidad de ganar grandes premios![/b]\n\n[quote]Este sorteo está abierto solo para residentes en España y mayores de 18 años.[/quote]\n\n[center][url=https://www.sorteo-navidad.com]Participa ahora[/url][/center]",
+  "comments": [
+    {
+      "comment": "¡Qué emoción! Estoy participando.",
+      "user": "60d2b1f7d3a0a815bb0e8be7",
+      "replies": [
+        {
+          "reply": "¡Mucha suerte! Espero que ganes.",
+          "user": "60d2b1f7d3a0a815bb0e8be8"
+        }
+      ]
+    }
+  ],
+  "author": "60d2b1f7d3a0a815bb0e8be7",
+  "ticket": {
+    "price": 5.99
+  },
+  "awards": [
+    {
+      "title": "Paquete Navideño",
+      "media": [
+        "https://example.com/images/award1.jpg"
+      ],
+      "description": "Un paquete con productos exclusivos de Navidad."
+    }
+  ],
+  "participants": [
+    "60d2b1f7d3a0a815bb0e8be7",
+    "60d2b1f7d3a0a815bb0e8be8"
+  ],
+  "state": "open"
+}

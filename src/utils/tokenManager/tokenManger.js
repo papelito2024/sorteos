@@ -31,7 +31,7 @@ class TokenManager {
   generateAccessToken() {
 
     this.accessToken= jsonwebtoken.sign(
-      { id : this.data._id },
+      { id :this.data._id.toString()},
       process.env.JWT_ACCESS_TOKEN_SECRET,
       {
         expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN,

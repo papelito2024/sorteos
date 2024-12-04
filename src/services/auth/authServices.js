@@ -26,6 +26,17 @@ export default class AuthService {
         return user;
     }
 
+    async getUserFromRefreshToken() {
+
+        const dec = await this.tokenManager.verifyToken(this.refreshToken, process.env.JWT_REFRESH_TOKEN_SCRECT)
+        console.log(dec)
+
+        const user = await Users.findOne({ _id: dec.id })
+
+        this.user = user
+
+        return user;
+    }
 
     async getAccessToken(){
         

@@ -1,9 +1,9 @@
+import { body } from "express-validator";
+import Users from "../../models/users.js";
 
-import { body } from 'express-validator'
-import Users from '../../models/users'
 
 
-module.exports = {
+export const validation = {
     signin: [
         body('email')
 
@@ -24,7 +24,7 @@ module.exports = {
             .isLength({ max: 15 }).withMessage("this fiel must not execed from 15 characters")
 
             .custom(async (value, { req }) => {
-                const user = await users.find({ username: value }).exec()
+                const user = await Users.find({ username: value }).exec()
 
                 if (user.length > 0) throw new Error("this user already exists");
 
@@ -35,7 +35,7 @@ module.exports = {
             .isLength(5).withMessage("this fiel must  have at least 5 characters")
             .isEmail().withMessage("this is not a valid email")
             .custom(async (value, { req }) => {
-                const user = await users.find({ email: value })
+                const user = await Users.find({ email: value })
                 console.log(user)
                 if (user.length) throw new Error("this email already exists");
 
@@ -53,7 +53,7 @@ module.exports = {
             .isLength(1).withMessage("this fiel must  have at least 1 characters")
             .isEmail().withMessage("this is not a valid email")
             .custom(async (value, { req }) => {
-                const user = await users.findOne({ email: value })
+                const user = await Users.findOne({ email: value })
                // console.log(user)
                 if (!user) throw new Error("this email does not correspond to a valid user");
 

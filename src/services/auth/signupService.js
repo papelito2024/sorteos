@@ -16,7 +16,7 @@ export default class SignupService extends AuthService {
             /**
              * save the user in the database
              */
-
+            
             const user = new Users(this.body)
 
             await user.save()

@@ -47,8 +47,11 @@ const usersSchema = new Schema(
 
     gender: String,
 
-    sorteos: [{ type: Schema.Types.ObjectId, ref: "sorteos" }],
+    raffles: [{ type: Schema.Types.ObjectId, ref: "Raffles" }],
 
+    tickets:[{
+      type: Schema.Types.ObjectId, ref: "Ticket" 
+    }],
     verified: {
       type: Boolean,
       default: false,
@@ -90,16 +93,16 @@ usersSchema.pre("save", async function (next) {
     this.password =await  this.generateHash(this.password)
     //generate key activate hash
 
-    const token = this.generateToken({ type: "verify", expire:Date.now() + (1000 * 60 * 60 * 24) })
+   this.generateToken({ type: "verify", expire:Date.now() + (1000 * 60 * 60 * 24) })
     
 
     return next();
   } catch (error) {
-    return next(error);
+    return next(error); 
   }
 });
 
-usersSchema.methods.generateToken = async function ({type,expiration}) {
+usersSchema.methods.generateToken =  function ({type,expiration}) {
 
   const token = uuidv4().replace(/[\/-]/g, '');
   
@@ -111,9 +114,8 @@ usersSchema.methods.generateToken = async function ({type,expiration}) {
 
   this.tokens= this.tokens.map(token=>token.tokenType==type ? tDoc : token )
   
-   await  this.save()
 
-  return  token
+
 };
 
 
